@@ -1,0 +1,7 @@
+%macro READ_FILE 2
+    mov rax, 0             ; Системный вызов для чтения
+    mov rdi, 0             ; Файловый дескриптор STDIN
+    mov rsi, %1            ; Адрес буфера для чтения
+    mov rdx, %2            ; Размер буфера
+    syscall
+%endmacro
