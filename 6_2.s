@@ -1,18 +1,19 @@
 %include "syscall.mac"
 
-%macro WRITE_FILE 2
-    mov rax, 1             ; Системный вызов для записи
-    mov rdi, 1             ; Файловый дескриптор STDOUT
-    mov rsi, %1            ; Адрес буфера для записи
-    mov rdx, %2            ; Размер буфера
-    syscall
+%macro WRITE 3
+    mov eax, 4         ; Системный вызов для записи
+    mov ebx, %1        ; Файловый дескриптор STDOUT
+    mov ecx, %2        ; Адрес буфера для записи
+    mov edx, %3        ; Размер буфера
+    int 0x80
 %endmacro
 
-%macro EXIT_PROGRAM 1
-    mov rax, 60            ; Системный вызов для выхода
-    mov rdi, %1            ; Код завершения
-    syscall
+%macro EXIT_PROGRAM 0
+    mov eax, 1            ; Системный вызов для выхода
+    xor ebx, ebx            ; Код завершения
+    int 0x80
 %endmacro
+
 
 section .data
     buffer equ 256    ; Размер буфера для строки
@@ -25,10 +26,11 @@ section .text
 
 _start:
     ; Чтение строки из stdin
-    READ_FILE input, buffer
+    READ 0, input, buffer
 
     ; Вывод строки в stdout
-    WRITE_FILE input, buffer
+    WRITE 1, input, buffer
 
     ; Выход из программы
-    EXIT_PROGRAM 0
+    EXIT_PROGRAM
+
