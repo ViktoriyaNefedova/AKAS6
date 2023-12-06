@@ -8,9 +8,9 @@
     int 0x80
 %endmacro
 
-%macro EXIT_PROGRAM 0
+%macro EXIT_PROGRAM 1
     mov eax, 1            ; Системный вызов для выхода
-    xor ebx, ebx            ; Код завершения
+    mov ebx, %1           ; Код завершения
     int 0x80
 %endmacro
 
@@ -32,5 +32,5 @@ _start:
     WRITE 1, input, buffer
 
     ; Выход из программы
-    EXIT_PROGRAM
+    EXIT_PROGRAM 0
 
